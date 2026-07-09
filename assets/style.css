@@ -799,6 +799,31 @@ footer.site-footer {
   margin-top: 14px;
 }
 
+.celebrate-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  padding: 8px 0 4px;
+}
+
+.celebrate-mascot {
+  width: 140px;
+  height: auto;
+}
+
+.celebrate-text h2 {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+}
+
+.celebrate-text p {
+  margin: 0;
+  max-width: 520px;
+  color: var(--text-muted);
+}
+
 .share-section {
   margin-top: 22px;
   padding-top: 20px;

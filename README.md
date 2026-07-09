@@ -43,8 +43,8 @@ npx serve .
 2. 프로젝트 설정 → 일반 → 내 앱 → 웹 앱 추가 → SDK 설정 및 구성에서 `firebaseConfig` 값 복사
 3. `assets/firebase-config.js`의 `firebaseConfig` 값을 복사한 값으로 교체 (공개 클라이언트 값이라 그대로 커밋해도 안전)
 4. Firestore Database 생성 (콘솔에서 "Firestore Database" → 데이터베이스 만들기)
-5. **Authentication → Sign-in method → Anonymous 활성화** (본인이 제출한 URL만 삭제할 수 있게 하려고, 화면에 보이지 않는 익명 로그인을 사용합니다. 별도 로그인 UI는 없습니다.)
-6. Firestore 규칙(Rules) 탭에서 아래 규칙 적용 — 로그인 없이 제출하는 구조이므로 항목 개수/크기를 제한해 남용을 방지하고, 본인이 만든 항목만 삭제할 수 있도록 제한합니다:
+5. **Authentication → Sign-in method → Anonymous 활성화** (제출 시 화면에 보이지 않는 익명 로그인을 사용합니다. 별도 로그인 UI는 없습니다.)
+6. Firestore 규칙(Rules) 탭에서 아래 규칙 적용 — 로그인 없이 제출하는 구조이므로 항목 개수/크기를 제한해 남용을 방지합니다. **삭제는 스터디원 누구나 할 수 있도록 열려 있습니다** (특정인 것만 지울 수 있게 제한하지 않음):
 
 ```
 rules_version = '2';
@@ -64,7 +64,7 @@ service cloud.firestore {
                     && request.resource.data.url.size() < 500
                     && request.resource.data.ownerId == request.auth.uid;
       allow update: if false;
-      allow delete: if request.auth != null && request.auth.uid == resource.data.ownerId;
+      allow delete: if true;
     }
   }
 }
@@ -72,4 +72,4 @@ service cloud.firestore {
 
 > 참고: Firestore 규칙의 `size()`는 UTF-8 **바이트** 기준입니다. 한글은 한 글자당 3바이트라서, 닉네임 글자 수 제한(입력창 `maxlength="30"`, 즉 최대 30자)을 감안해 바이트 제한을 120으로 넉넉하게 잡았습니다.
 
-설정 전에는 "배포 URL 공유하기" 폼이 비활성화되고 안내 메시지가 표시됩니다. 각 항목 카드의 ✕ 버튼은 본인이 제출한 항목에만 나타나며(익명 로그인 UID로 판별), Firestore 규칙에서도 실제로 본인 것만 삭제 가능하도록 강제합니다.
+설정 전에는 "배포 URL 공유하기" 폼이 비활성화되고 안내 메시지가 표시됩니다. 각 항목 카드의 ✕ 버튼은 누구에게나 보이며, 클릭하면 확인 창을 거쳐 바로 삭제됩니다 — 스터디원이 서로 잘못 올린 항목을 정리할 수 있게 하려는 의도이지만, 악의적으로 남의 제출물을 지울 수도 있다는 점을 감안하세요.

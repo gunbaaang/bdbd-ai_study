@@ -89,24 +89,22 @@ function renderList(docs, db) {
     a.append(nameSpan, ideaSpan, urlSpan, timeSpan);
     li.appendChild(a);
 
-    if (currentUid && data.ownerId === currentUid) {
-      const deleteBtn = document.createElement("button");
-      deleteBtn.type = "button";
-      deleteBtn.className = "url-card-delete";
-      deleteBtn.title = "삭제";
-      deleteBtn.textContent = "✕";
-      deleteBtn.addEventListener("click", async () => {
-        if (!confirm("이 제출을 삭제할까요?")) return;
-        deleteBtn.disabled = true;
-        try {
-          await deleteDoc(doc(db, "deployUrls", docSnap.id));
-        } catch (err) {
-          alert(`삭제 실패: ${err.message}`);
-          deleteBtn.disabled = false;
-        }
-      });
-      li.appendChild(deleteBtn);
-    }
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.className = "url-card-delete";
+    deleteBtn.title = "삭제";
+    deleteBtn.textContent = "✕";
+    deleteBtn.addEventListener("click", async () => {
+      if (!confirm("이 제출을 삭제할까요?")) return;
+      deleteBtn.disabled = true;
+      try {
+        await deleteDoc(doc(db, "deployUrls", docSnap.id));
+      } catch (err) {
+        alert(`삭제 실패: ${err.message}`);
+        deleteBtn.disabled = false;
+      }
+    });
+    li.appendChild(deleteBtn);
 
     listEl.appendChild(li);
   });

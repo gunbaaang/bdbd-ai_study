@@ -211,3 +211,75 @@ document.addEventListener("click", (e) => {
     { passive: true }
   );
 })();
+
+// 4단계 끝 → 실습 완료 카드로 느린 커스텀 스크롤 전환
+(function () {
+  const step4 = document.getElementById("step4");
+  const celebrate = document.getElementById("celebrateSection");
+  if (!step4 || !celebrate) return;
+
+  const TRANSITION_DURATION = 900;
+  let isAnimating = false;
+
+  function animateScrollTo(targetY, duration) {
+    const startY = window.pageYOffset;
+    const distance = targetY - startY;
+    if (Math.abs(distance) < 1) return;
+    isAnimating = true;
+    const startTime = performance.now();
+
+    function step(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      window.scrollTo(0, startY + distance * eased);
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        isAnimating = false;
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  function nearStep4End() {
+    const step4Bottom = step4.offsetTop + step4.offsetHeight;
+    const viewportBottom = window.scrollY + window.innerHeight;
+    return window.scrollY < celebrate.offsetTop && viewportBottom >= step4Bottom;
+  }
+
+  window.addEventListener(
+    "wheel",
+    (e) => {
+      if (isAnimating) return;
+      if (e.deltaY > 0 && nearStep4End()) {
+        e.preventDefault();
+        animateScrollTo(celebrate.offsetTop, TRANSITION_DURATION);
+      }
+    },
+    { passive: false }
+  );
+
+  let touchStartY = null;
+  window.addEventListener(
+    "touchstart",
+    (e) => {
+      touchStartY = e.touches[0].clientY;
+    },
+    { passive: true }
+  );
+
+  window.addEventListener(
+    "touchmove",
+    (e) => {
+      if (touchStartY === null || isAnimating) return;
+      const deltaY = touchStartY - e.touches[0].clientY;
+      if (deltaY > 30 && nearStep4End()) {
+        e.preventDefault();
+        animateScrollTo(celebrate.offsetTop, TRANSITION_DURATION);
+        touchStartY = null;
+      }
+    },
+    { passive: false }
+  );
+})();
