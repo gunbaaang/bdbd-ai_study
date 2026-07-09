@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>바이브코딩 스터디 실습 가이드</title>
+  <meta name="description" content="한 줄 아이디어를 기획서로, 기획서를 실제 동작하는 앱으로 만들어 배포까지 해보는 스터디 실습 가이드" />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+
+<body>
+
+  <section class="title-screen" id="titleScreen">
+    <div class="title-logo">
+      <img src="assets/images/Logo_BDBD.png" alt="BDBD 로고" />
+    </div>
+    <div class="title-center">
+      <img src="assets/images/버디.png" alt="버디 캐릭터" class="title-buddy" />
+      <h1 class="title-text"><span class="hl">딸</span>깍으로 <span class="hl">기</span>획하기</h1>
+    </div>
+    <button class="scroll-cue" id="scrollCue" aria-label="아래로 스크롤">
+      <span class="scroll-cue-icon">↓</span>
+      <span class="scroll-cue-text">스크롤해서 시작하기</span>
+    </button>
+  </section>
+
+  <div class="page-content" id="pageContent">
+  <header class="site-header">
+    <div class="brand"><span class="logo-dot"></span> 바이브코딩 스터디 실습</div>
+    <nav class="top-nav">
+      <a href="index.html" class="active">실습 가이드</a>
+      <a href="extras.html">번외</a>
+    </nav>
+  </header>
+
+  <div class="layout">
+    <main class="content">
+      <section class="hero">
+        <h1>한 줄 아이디어에서 배포까지</h1>
+        <p>아래 단계를 순서대로 따라가며 진행하세요. 프롬프트는 복사 버튼으로 바로 붙여넣을 수 있습니다.</p>
+      </section>
+
+      <!-- STEP 1 -->
+      <section class="step" id="step1">
+        <div class="step-heading">
+          <div class="step-badge">1</div>
+          <h2>기획 체험</h2>
+          <span class="step-time">20분</span>
+        </div>
+        <span class="highlight-tag">핵심 강조 구간</span>
+        <p class="step-goal"><strong>목적:</strong> "한 줄 아이디어"가 왜 그대로 개발에 못 들어가는지 체감시키기.</p>
+
+        <h3 class="sub-heading">챗봇 바로가기</h3>
+        <div class="chatbot-links">
+          <a class="chatbot-chip" href="https://gemini.google.com/app" target="_blank" rel="noopener">
+            <span class="icon icon-gemini">G</span> Gemini 앱
+          </a>
+          <a class="chatbot-chip" href="https://chatgpt.com" target="_blank" rel="noopener">
+            <span class="icon icon-chatgpt">C</span> ChatGPT (무료)
+          </a>
+          <a class="chatbot-chip" href="https://claude.ai" target="_blank" rel="noopener">
+            <span class="icon icon-claude">A</span> Claude (무료)
+          </a>
+        </div>
+
+        <h3 class="sub-heading">진행 방식</h3>
+        <ol class="steplist">
+          <li>스터디원 각자 한 줄 아이디어 작성 (예: "동네 스터디룸 예약 사이트 만들고 싶어")</li>
+          <li>위 챗봇 바로가기 중 하나에 접속해 아래 템플릿을 입력</li>
+        </ol>
+
+        <div class="prompt-block">
+          <div class="prompt-toolbar">
+            <span class="prompt-status" data-status-for="prompt1">✎ 수정됨 (자동저장)</span>
+            <button class="reset-btn" data-reset-target="prompt1" title="원본 프롬프트로 되돌리기">↺ 초기화</button>
+            <button class="copy-btn" data-copy-target="prompt1">📋 복사</button>
+          </div>
+          <textarea id="prompt1" class="prompt-textarea" data-editable-prompt spellcheck="false">너는 시니어 서비스 기획자야. 아래 한 줄 아이디어를 구체적인 기획서로 만들어줘.
+한 줄 아이디어: [여기에 입력]
+포함할 내용:
+1. 타겟 사용자와 핵심 문제
+2. 핵심 기능 1개 (반드시 데이터 저장/조회/변경 로직이 있는 기능으로)
+3. 화면 구성 (몇 개 화면, 각 화면에 뭐가 있는지)
+4. 사용자 흐름 (1번 화면 → 2번 화면 → ...)
+5. 데이터 항목 (어떤 정보를 저장해야 하는지 목록)
+말투는 개발자에게 바로 전달 가능하도록 명확하고 간결하게.</textarea>
+        </div>
+
+        <ol class="steplist" start="3">
+          <li>결과 프롬프트에서 <strong>"핵심 기능이 로직을 포함하는가"</strong> 검토 → 없으면 "예약 취소 시 재고 복구", "포인트 적립" 같은 조건부 로직을 추가한 후 재요청</li>
+        </ol>
+
+        <div class="callout">
+          여기서 나온 결과물을 그대로 복사해서 2단계 프롬프트에 붙여넣습니다.
+        </div>
+      </section>
+
+      <!-- STEP 2 -->
+      <section class="step" id="step2">
+        <div class="step-heading">
+          <div class="step-badge">2</div>
+          <h2>빌드</h2>
+          <span class="step-time">30분</span>
+        </div>
+
+        <h3 class="sub-heading">세팅</h3>
+        <div class="step-actions">
+          <a class="btn btn-primary" href="https://aistudio.google.com/build" target="_blank" rel="noopener">
+            🚀 Google AI Studio Build 바로가기
+          </a>
+        </div>
+        <ol class="steplist">
+          <li>aistudio.google.com 접속 → Google 계정 로그인 → <strong>Build</strong> 탭 진입</li>
+          <li>새 프로젝트 생성, 모델은 <strong>Flash 계열</strong>로 고정 (한도 절약)</li>
+        </ol>
+
+        <h3 class="sub-heading">프롬프트 입력</h3>
+        <p>1단계에서 만든 기획서 전체를 붙여넣기</p>
+
+        <div class="check-box">
+          <h4>✅ 로직 강제 체크포인트 — 빌드 후 아래 중 하나가 동작하는지 확인</h4>
+          <ul class="plainlist">
+            <li>데이터 등록 → 목록에 즉시 반영되는가</li>
+            <li>조건에 따라 화면/버튼이 달라지는가 (예: 로그인 여부, 재고 여부)</li>
+            <li>관리자 계정으로 보면 일반 사용자와 다른 화면이 나오는가</li>
+          </ul>
+        </div>
+
+        <p>안 되어 있으면 추가 프롬프트:</p>
+        <div class="prompt-block">
+          <div class="prompt-toolbar">
+            <span class="prompt-status" data-status-for="prompt2">✎ 수정됨 (자동저장)</span>
+            <button class="reset-btn" data-reset-target="prompt2" title="원본 프롬프트로 되돌리기">↺ 초기화</button>
+            <button class="copy-btn" data-copy-target="prompt2">📋 복사</button>
+          </div>
+          <textarea id="prompt2" class="prompt-textarea" data-editable-prompt spellcheck="false">방금 만든 [기능]에 조건 로직을 추가해줘.
+예: 예약 인원이 정원을 초과하면 "마감" 표시가 뜨고 예약 버튼이 비활성화되도록.</textarea>
+        </div>
+      </section>
+
+      <!-- STEP 3 -->
+      <section class="step" id="step3">
+        <div class="step-heading">
+          <div class="step-badge">3</div>
+          <h2>테스트 &amp; 디버깅</h2>
+          <span class="step-time">15분</span>
+        </div>
+
+        <div class="callout">
+          실습 전 진행자가 미리 확인해둘 것: AI Studio Build는 오류 발생 시 <strong>에러 메시지를 그대로 복사해서 프롬프트 창에 붙여넣으면 AI가 원인 분석 후 수정 코드를 다시
+            생성</strong>하는 구조입니다. 별도 콘솔/터미널 지식 불필요.
+        </div>
+
+        <h3 class="sub-heading">자주 나는 오류 유형과 대응 (클릭해서 펼치기)</h3>
+
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>로그인 창이 안 뜨거나 멈춤 <span class="tag-cause">Firebase 도메인 미등록</span></span>
+              <span class="chevron">▾</span>
+            </button>
+            <div class="faq-answer">
+              <p>원인: Firebase 승인된 도메인 미등록</p>
+              <p>해결: 아래 프롬프트를 그대로 입력하고, 안내받은 Firebase 콘솔 경로로 이동해 도메인을 추가하세요.</p>
+              <div class="solution-prompt">
+                <span id="sol1" class="editable-inline" data-editable-prompt contenteditable="true" spellcheck="false">로그인이 안 돼. Firebase에서 승인된 도메인을 어디서 추가하는지 알려줘</span>
+                <button class="reset-btn-inline" data-reset-target="sol1" title="원본으로 되돌리기">↺</button>
+                <button class="copy-btn-inline" data-copy-target="sol1">복사</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>저장한 데이터가 안 보임 <span class="tag-cause">DB 연동 승인 누락</span></span>
+              <span class="chevron">▾</span>
+            </button>
+            <div class="faq-answer">
+              <p>원인: DB 연동 승인 누락</p>
+              <div class="solution-prompt">
+                <span id="sol2" class="editable-inline" data-editable-prompt contenteditable="true" spellcheck="false">Add Database and Auth를 다시 확인해줘, 데이터가 저장되지 않아</span>
+                <button class="reset-btn-inline" data-reset-target="sol2" title="원본으로 되돌리기">↺</button>
+                <button class="copy-btn-inline" data-copy-target="sol2">복사</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>429 / 응답 지연 <span class="tag-cause">무료 할당량 초과</span></span>
+              <span class="chevron">▾</span>
+            </button>
+            <div class="faq-answer">
+              <p>원인: 무료 할당량 초과</p>
+              <p>해결: 잠시 대기하거나 모델을 <strong>Flash-Lite</strong>로 변경합니다. (별도 프롬프트 불필요)</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>화면 깨짐 <span class="tag-cause">프롬프트 지시가 모호</span></span>
+              <span class="chevron">▾</span>
+            </button>
+            <div class="faq-answer">
+              <p>원인: 프롬프트 지시가 모호함</p>
+              <p>해결: 스크린샷을 첨부하고 아래 프롬프트를 참고해 구체적으로 요청하세요.</p>
+              <div class="solution-prompt">
+                <span id="sol3" class="editable-inline" data-editable-prompt contenteditable="true" spellcheck="false">이 화면에서 [구체적 요소]가 [의도한 대로] 안 보여. 스크린샷 기준으로 수정해줘</span>
+                <button class="reset-btn-inline" data-reset-target="sol3" title="원본으로 되돌리기">↺</button>
+                <button class="copy-btn-inline" data-copy-target="sol3">복사</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="sub-heading">실습 방법</h3>
+        <p>진행자가 일부러 도메인 미등록 상태로 배포 전 로그인 테스트를 시켜서, 오류 → "에러 메시지 복사 → AI에게 그대로 붙여넣기 → 원인 파악 → 해결"의 사이클을 1회 이상 경험하게 합니다.
+        </p>
+      </section>
+
+      <!-- STEP 4 -->
+      <section class="step" id="step4">
+        <div class="step-heading">
+          <div class="step-badge">4</div>
+          <h2>배포</h2>
+          <span class="step-time">13분</span>
+        </div>
+
+        <ol class="steplist">
+          <li>상단 <strong>Publish</strong> 클릭</li>
+          <li>처음 배포 시 Google Cloud Run 연결 → 신용카드 등록 없이 첫 두 개 앱 무료 배포</li>
+          <li>배포 완료 후 생성된 URL을 팀원들과 공유</li>
+          <li>실제 접속해서 기능이 배포 환경에서도 동작하는지 확인
+            <ul class="plainlist">
+              <li>안 되면 3단계와 동일하게 "배포 후 [기능]이 안 돼, 원인이 뭐야?" 프롬프트로 대응 (도메인 승인 재확인이 가장 흔한 원인)</li>
+            </ul>
+          </li>
+        </ol>
+
+        <div class="prompt-block">
+          <div class="prompt-toolbar">
+            <span class="prompt-status" data-status-for="prompt4">✎ 수정됨 (자동저장)</span>
+            <button class="reset-btn" data-reset-target="prompt4" title="원본 프롬프트로 되돌리기">↺ 초기화</button>
+            <button class="copy-btn" data-copy-target="prompt4">📋 복사</button>
+          </div>
+          <textarea id="prompt4" class="prompt-textarea" data-editable-prompt spellcheck="false">배포 후 [기능]이 안 돼, 원인이 뭐야?</textarea>
+        </div>
+
+        <div class="callout">
+          🎉 여기까지 완료하면 실습 종료입니다. 배포된 URL을 팀원들과 공유하고, <a href="extras.html">번외 페이지</a>에서 AI별 결과 차이도 함께 확인해보세요.
+        </div>
+
+        <div class="share-section" id="urlShare">
+          <h3 class="sub-heading">🔗 배포 URL 공유하기</h3>
+          <p class="step-goal">배포한 앱 URL을 올리면 다른 스터디원들도 바로 접속해볼 수 있어요.</p>
+
+          <form class="url-form" id="urlShareForm">
+            <input type="text" id="urlShareName" class="url-input" placeholder="닉네임" maxlength="30" required />
+            <input type="url" id="urlShareUrl" class="url-input url-input-wide" placeholder="https://your-app.web.app" required />
+            <button type="submit" class="btn btn-primary">제출</button>
+          </form>
+          <p class="url-form-status" id="urlShareStatus"></p>
+
+          <ul class="url-list" id="urlShareList">
+            <li class="url-list-empty" id="urlShareEmpty">아직 제출된 URL이 없습니다. 첫 번째로 공유해보세요!</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="site-footer">바이브코딩 스터디 실습 가이드 · 이 페이지는 정적 사이트로 배포되어 있습니다</footer>
+  </div>
+
+  <script src="assets/script.js"></script>
+  <script type="module" src="assets/url-share.js"></script>
+</body>
+
+</html>
