@@ -686,7 +686,8 @@ footer.site-footer {
 }
 
 .url-input {
-  flex: 1 1 140px;
+  flex: 1 1 120px;
+  min-width: 0;
   padding: 10px 12px;
   border-radius: 10px;
   border: 1px solid var(--border);
@@ -696,7 +697,13 @@ footer.site-footer {
   font-family: inherit;
 }
 
-.url-input-wide { flex: 2 1 220px; }
+.url-input-name { flex: 0 1 90px; }
+.url-input-wide { flex: 2 1 180px; }
+
+.url-form .btn {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
 
 .url-input:focus {
   outline: none;
