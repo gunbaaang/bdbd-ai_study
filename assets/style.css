@@ -751,6 +751,16 @@ footer.site-footer {
   flex-shrink: 0;
 }
 
+.url-card-idea {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 1;
+  max-width: 160px;
+}
+
 .url-card-url {
   color: var(--primary);
   font-size: 0.85rem;

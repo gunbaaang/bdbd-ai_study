@@ -51,10 +51,13 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /deployUrls/{docId} {
       allow read: if true;
-      allow create: if request.resource.data.keys().hasOnly(['name', 'url', 'createdAt'])
+      allow create: if request.resource.data.keys().hasOnly(['name', 'ideaName', 'url', 'createdAt'])
                     && request.resource.data.name is string
                     && request.resource.data.name.size() > 0
-                    && request.resource.data.name.size() < 40
+                    && request.resource.data.name.size() < 120
+                    && request.resource.data.ideaName is string
+                    && request.resource.data.ideaName.size() > 0
+                    && request.resource.data.ideaName.size() < 200
                     && request.resource.data.url is string
                     && request.resource.data.url.size() < 500;
       allow update, delete: if false;
@@ -62,5 +65,7 @@ service cloud.firestore {
   }
 }
 ```
+
+> 참고: Firestore 규칙의 `size()`는 UTF-8 **바이트** 기준입니다. 한글은 한 글자당 3바이트라서, 닉네임 글자 수 제한(입력창 `maxlength="30"`, 즉 최대 30자)을 감안해 바이트 제한을 120으로 넉넉하게 잡았습니다.
 
 설정 전에는 "배포 URL 공유하기" 폼이 비활성화되고 안내 메시지가 표시됩니다.

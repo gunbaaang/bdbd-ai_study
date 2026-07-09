@@ -13,6 +13,7 @@ import { firebaseConfig } from "./firebase-config.js";
 
 const form = document.getElementById("urlShareForm");
 const nameInput = document.getElementById("urlShareName");
+const ideaInput = document.getElementById("urlShareIdea");
 const urlInput = document.getElementById("urlShareUrl");
 const statusEl = document.getElementById("urlShareStatus");
 const listEl = document.getElementById("urlShareList");
@@ -64,6 +65,10 @@ function renderList(docs) {
     nameSpan.className = "url-card-name";
     nameSpan.textContent = data.name || "익명";
 
+    const ideaSpan = document.createElement("span");
+    ideaSpan.className = "url-card-idea";
+    ideaSpan.textContent = data.ideaName || "";
+
     const urlSpan = document.createElement("span");
     urlSpan.className = "url-card-url";
     urlSpan.textContent = data.url.replace(/^https?:\/\//i, "");
@@ -72,7 +77,7 @@ function renderList(docs) {
     timeSpan.className = "url-card-time";
     timeSpan.textContent = formatTime(data.createdAt?.toDate ? data.createdAt.toDate() : null);
 
-    a.append(nameSpan, urlSpan, timeSpan);
+    a.append(nameSpan, ideaSpan, urlSpan, timeSpan);
     li.appendChild(a);
     listEl.appendChild(li);
   });
@@ -101,9 +106,10 @@ if (!isConfigured) {
     form?.addEventListener("submit", async (e) => {
       e.preventDefault();
       const name = nameInput.value.trim();
+      const ideaName = ideaInput.value.trim();
       const url = normalizeUrl(urlInput.value);
-      if (!name || !url) {
-        setStatus("닉네임과 URL을 모두 입력해주세요.", "error");
+      if (!name || !ideaName || !url) {
+        setStatus("닉네임, 아이디어명, URL을 모두 입력해주세요.", "error");
         return;
       }
 
@@ -111,7 +117,7 @@ if (!isConfigured) {
       submitBtn.disabled = true;
       setStatus("제출 중...", "");
       try {
-        await addDoc(submissionsRef, { name, url, createdAt: serverTimestamp() });
+        await addDoc(submissionsRef, { name, ideaName, url, createdAt: serverTimestamp() });
         form.reset();
         setStatus("제출되었습니다!", "success");
       } catch (err) {
