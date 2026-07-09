@@ -1,8 +1,15 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import {
+  getAuth,
+  signInAnonymously,
+  onAuthStateChanged,
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import {
   getFirestore,
   collection,
+  doc,
   addDoc,
+  deleteDoc,
   onSnapshot,
   query,
   orderBy,
@@ -20,6 +27,8 @@ const listEl = document.getElementById("urlShareList");
 const emptyEl = document.getElementById("urlShareEmpty");
 
 const isConfigured = !!firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith("YOUR_");
+
+let currentUid = null;
 
 function setStatus(message, type) {
   if (!statusEl) return;
@@ -43,7 +52,7 @@ function formatTime(date) {
   });
 }
 
-function renderList(docs) {
+function renderList(docs, db) {
   if (!listEl) return;
   listEl.querySelectorAll(".url-card").forEach((el) => el.remove());
   if (emptyEl) emptyEl.hidden = docs.length > 0;
@@ -79,6 +88,26 @@ function renderList(docs) {
 
     a.append(nameSpan, ideaSpan, urlSpan, timeSpan);
     li.appendChild(a);
+
+    if (currentUid && data.ownerId === currentUid) {
+      const deleteBtn = document.createElement("button");
+      deleteBtn.type = "button";
+      deleteBtn.className = "url-card-delete";
+      deleteBtn.title = "삭제";
+      deleteBtn.textContent = "✕";
+      deleteBtn.addEventListener("click", async () => {
+        if (!confirm("이 제출을 삭제할까요?")) return;
+        deleteBtn.disabled = true;
+        try {
+          await deleteDoc(doc(db, "deployUrls", docSnap.id));
+        } catch (err) {
+          alert(`삭제 실패: ${err.message}`);
+          deleteBtn.disabled = false;
+        }
+      });
+      li.appendChild(deleteBtn);
+    }
+
     listEl.appendChild(li);
   });
 }
@@ -94,14 +123,29 @@ if (!isConfigured) {
   try {
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    const auth = getAuth(app);
     const submissionsRef = collection(db, "deployUrls");
     const listQuery = query(submissionsRef, orderBy("createdAt", "desc"), limit(50));
 
+    let latestDocs = [];
+
     onSnapshot(
       listQuery,
-      (snapshot) => renderList(snapshot.docs),
+      (snapshot) => {
+        latestDocs = snapshot.docs;
+        renderList(latestDocs, db);
+      },
       (err) => setStatus(`목록을 불러오지 못했습니다: ${err.message}`, "error")
     );
+
+    onAuthStateChanged(auth, (user) => {
+      currentUid = user ? user.uid : null;
+      renderList(latestDocs, db);
+    });
+
+    signInAnonymously(auth).catch((err) => {
+      setStatus(`로그인 실패: ${err.message}`, "error");
+    });
 
     form?.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -112,12 +156,22 @@ if (!isConfigured) {
         setStatus("닉네임, 아이디어명, URL을 모두 입력해주세요.", "error");
         return;
       }
+      if (!currentUid) {
+        setStatus("로그인 준비 중입니다. 잠시 후 다시 시도해주세요.", "error");
+        return;
+      }
 
       const submitBtn = form.querySelector("button[type=submit]");
       submitBtn.disabled = true;
       setStatus("제출 중...", "");
       try {
-        await addDoc(submissionsRef, { name, ideaName, url, createdAt: serverTimestamp() });
+        await addDoc(submissionsRef, {
+          name,
+          ideaName,
+          url,
+          ownerId: currentUid,
+          createdAt: serverTimestamp(),
+        });
         form.reset();
         setStatus("제출되었습니다!", "success");
       } catch (err) {
